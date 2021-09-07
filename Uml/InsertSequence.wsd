@@ -1,0 +1,33 @@
+@startuml
+title "The UML diagram"
+skinparam monochrome true
+participant Database order 30
+Client -> Database: initializeConnection()
+activate Database
+Client <-- Database
+Client -> Api : run(path, input)
+activate Api
+Api -> BookModel: getByTitle(input)
+activate BookModel
+Api <-- BookModel: book
+deactivate BookModel
+alt Book already exists
+Client <-- Api: 400: Book already exists
+else
+Api -> Api : createBook()
+Api -> BookModelInstantie **:
+activate BookModelInstantie
+Api <-- BookModelInstantie : book
+Api -> BookModelInstantie : create()
+BookModelInstantie -> Database : runQuery()
+BookModelInstantie <-- Database
+Api <-- BookModelInstantie
+deactivate BookModelInstantie
+Client <-- Api
+deactivate Database
+
+end
+
+
+
+@enduml

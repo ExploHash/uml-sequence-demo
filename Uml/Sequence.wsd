@@ -1,0 +1,26 @@
+@startuml
+title "The UML diagram"
+skinparam monochrome true
+participant Database order 30
+Client -> Database: initializeConnection()
+activate Database
+Client -> Api : run(path, input)
+activate Api
+Api -> Api : getBook()
+Api -> BookModel : getByTitle(input)  
+activate BookModel
+BookModel -> Database : runQuery(query)
+BookModel <-- Database : ResultSet
+BookModel -> BookmodelInstantie **:
+activate BookmodelInstantie
+BookModel <-- BookmodelInstantie : BookModel
+Api <-- BookModel : BookModel
+deactivate BookModel
+Api -> BookmodelInstantie : getJson()
+Api <-- BookmodelInstantie : json
+Client <-- Api : json
+
+deactivate Database
+
+
+@enduml
